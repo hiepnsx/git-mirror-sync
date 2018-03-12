@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config();
 
 const HANDLER_URL   = process.env.HANDLER_URL,
       PORT          = process.env.PORT,
@@ -18,33 +18,33 @@ if(process.env.NODE_ENV === "production")
 
 http.createServer(function (req, res) {
   handler(req, res, function () {
-    res.statusCode = 404
-    res.end('No such location!')
+    res.statusCode = 404;
+    res.end('No such location!');
   })
-}).listen(PORT)
+}).listen(PORT);
 
 handler.on('push', function (event) {
   console.log('Received a push event for %s to %s',
     event.payload.repository.name,
-    event.payload.ref)
+    event.payload.ref);
 
-  const folderPath = REPO_PATH + event.payload.repository.name + '.git'
+  const folderPath = REPO_PATH + event.payload.repository.name + '.git';
 
   // Check repo folder is exist
   fs.access(folderPath, function (err) {
     if (err && err.code === 'ENOENT') {
-      console.log('Folder: ' + folderPath + ' not exist!')
-      return
+      console.log('Folder: ' + folderPath + ' not exist!');
+      return;
     }
     const command = 'cd ' + folderPath +
-      ' && git fetch -p && chown -R sysv-dev-release:sysv-dev-release' + folderPath
+      ' && git fetch -p && chown -R sysv-dev-release:sysv-dev-release ' + folderPath;
     exec(command, (err, stdout, stderr) => {
       if (err) {
-        console.log('Error when run: ' + command)
-        return
+        console.log('Error when run: ' + command);
+        return;
       }
-      console.log(`stdout: ${stdout}`)
-      console.log(`stderr: ${stderr}`)
+      console.log(`stdout: ${stdout}`);
+      console.log(`stderr: ${stderr}`);
     })
 
   })
